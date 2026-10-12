@@ -35,8 +35,8 @@ button{border:0;font:inherit;cursor:pointer}.icon{width:52px;height:52px;border-
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js"></script>
 <script>
 const API="https://aunglan.alwaysdata.net/",PIN="2580",KEY="aunglan_web_device_id";
-const FB={apiKey:"REPLACE_WITH_FIREBASE_WEB_API_KEY",authDomain:"REPLACE_WITH_FIREBASE_WEB_AUTH_DOMAIN",projectId:"REPLACE_WITH_FIREBASE_PROJECT_ID",storageBucket:"REPLACE_WITH_FIREBASE_STORAGE_BUCKET",messagingSenderId:"REPLACE_WITH_FIREBASE_MESSAGING_SENDER_ID",appId:"REPLACE_WITH_FIREBASE_WEB_APP_ID"};
-const VAPID="REPLACE_WITH_FIREBASE_WEB_PUSH_CERTIFICATE_KEY_PAIR_PUBLIC_KEY";
+const FB={apiKey:"AIzaSyDhUAq9hqVtz3hKl-xmbWR3DZITGAtZgME",authDomain:"aunglan-2fae0.firebaseapp.com",projectId:"aunglan-2fae0",storageBucket:"aunglan-2fae0.firebasestorage.app",messagingSenderId:"1013010215516",appId:"1:1013010215516:web:ccf9df38eee7319ca1ac99",measurementId:"G-7WYBDSSVDD"};
+const VAPID="BCJLiy9nLGCfVYNHNa6oYWg96GYj8HwIcrEU5EHQ2d5n6dVzFTLZ4bR6BqhwJftI3zW-Y6NixJ5DRRG3pYatlX0";
 const $=x=>document.getElementById(x),esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 function did(){let x=localStorage.getItem(KEY);if(!x){x=crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random();localStorage.setItem(KEY,x)}return x}
 function modal(h){$("sheet").innerHTML=h;$("modal").classList.add("open")}function close(){ $("modal").classList.remove("open")}
