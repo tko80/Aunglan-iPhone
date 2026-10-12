@@ -34,7 +34,7 @@ button{border:0;font:inherit;cursor:pointer}.icon{width:52px;height:52px;border-
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js"></script>
 <script>
-const API="https://aunglan.alwaysdata.net/iphone_api.php",PIN="2580",KEY="aunglan_web_device_id";
+const API="https://aunglan.alwaysdata.net/",PIN="2580",KEY="aunglan_web_device_id";
 const api=(endpoint,options={})=>{
   const u=API+"?endpoint="+encodeURIComponent(endpoint);
   return fetch(u,options);
