@@ -1,8 +1,9 @@
+
 importScripts("https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js");
 importScripts("https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js");
 
 firebase.initializeApp({
-  apiKey: "AIzaSyDhUAq9hqVtz3hKl-xmbWR3DZITGAtZgME",
+  apiKey: "AIzaSyDhUA9hqVtz3hKl-xmbWR3DZITGAtZgME",
   authDomain: "aunglan-2fae0.firebaseapp.com",
   projectId: "aunglan-2fae0",
   storageBucket: "aunglan-2fae0.firebasestorage.app",
@@ -13,28 +14,28 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage((payload) => {
-  const title = (payload.notification && payload.notification.title) || "Aunglan Update";
-  const options = {
-    body: (payload.notification && payload.notification.body) || "A new announcement is available.",
-    icon: "./icon.png",
-    badge: "./icon.png",
-    data: { url: "./" }
-  };
-  self.registration.showNotification(title, options);
-});
+// Avoid manually displaying the same notification twice.
+// Firebase handles background notification payloads automatically.
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
+
   event.waitUntil((async () => {
     const url = new URL("./", self.location.href).href;
-    const clientsList = await clients.matchAll({ type: "window", includeUncontrolled: true });
+    const clientsList = await self.clients.matchAll({
+      type: "window",
+      includeUncontrolled: true
+    });
+
     for (const client of clientsList) {
-      if (client.url.startsWith(self.location.origin) && "focus" in client) {
+      if (client.url.startsWith(self.location.origin)) {
         await client.focus();
         return;
       }
     }
-    if (clients.openWindow) await clients.openWindow(url);
+
+    if (self.clients.openWindow) {
+      await self.clients.openWindow(url);
+    }
   })());
 });
