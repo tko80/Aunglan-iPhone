@@ -26,8 +26,8 @@ button{border:0;font:inherit;cursor:pointer}.icon{width:52px;height:52px;border-
 <div class="status" id="status">🌐 Server မှ Update ကို စောင့်နေပါသည်...</div>
 <button class="btn" id="reload">↻ Reload Update</button><div class="row"><button class="btn light" id="send">✉️ Send</button><button class="btn light" id="mine">📨 My Messages</button></div>
 <button class="btn" id="notify">🔔 Enable iPhone Notifications</button>
-<div class="card" style="margin-top:20px"><div class="section">💳 Quick Pay</div><div class="small">တန်ဆာခပေးရန်</div><p>👤 <b>Tin Win Ko</b><br>📱 09952599995</p><div class="row"><button class="btn light" onclick="alert('KPay: 09952599995')">💳 KPay</button><button class="btn light" id="copy">📋 Copy No</button></div></div>
-<div class="row"><button class="btn light" onclick="location.href='tel:09952599995'">📞 U9</button><button class="btn light" onclick="location.href='tel:09444551119'">📞 MPT</button><button class="btn light" onclick="location.href='viber://chat/?number=%2B959952599995'">Viber</button></div>
+<div class="card" style="margin-top:20px"><div class="section">💳 Quick Pay</div><div class="small">တန်ဆာခပေးရန်</div><p>👤 <b>Tin Win Ko</b><br>📱 09952599995</p><div class="row"><button class="btn light" onclick="openKPay()">💳 KPay</button><button class="btn light" id="copy">📋 Copy No</button></div></div>
+<div class="row"><button class="btn light" onclick="location.href='tel:09952599995'">📞 U9</button><button class="btn light" onclick="location.href='tel:09444551119'">📞 MPT</button><button class="btn light" onclick="openViberChat()">Viber</button></div>
 <div class="footer">Tin Win Ko • Information Service</div></div>
 <div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
@@ -37,6 +37,29 @@ const API="https://aunglan.alwaysdata.net/",PIN="2580",KEY="aunglan_web_device_i
 const FB={apiKey:"AIzaSyDhUAq9hqVtz3hKl-xmbWR3DZITGAtZgME",authDomain:"aunglan-2fae0.firebaseapp.com",projectId:"aunglan-2fae0",storageBucket:"aunglan-2fae0.firebasestorage.app",messagingSenderId:"1013010215516",appId:"1:1013010215516:web:ccf9df38eee7319ca1ac99",measurementId:"G-7WYBDSSVDD"};
 const VAPID="BCJLiy9nLGCfVYNHNa6oYWg96GYj8HwIcrEU5EHQ2d5n6dVzFTLZ4bR6BqhwJftI3zW-Y6NixJ5DRRG3pYatlX0";
 const $=x=>document.getElementById(x),esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+function openViberChat(){
+  const phone = "+959952599995";
+  const appUrl = "viber://chat?number=" + encodeURIComponent(phone);
+  window.location.href = appUrl;
+}
+function openKPay(){
+  // Try opening KBZPay first; if it does not open, offer its official App Store page.
+  const appStoreUrl = "https://apps.apple.com/my/app/kbzpay-customer/id1398852297";
+  let leftPage = false;
+  const onVisibility = () => {
+    if (document.visibilityState === "hidden") leftPage = true;
+  };
+  document.addEventListener("visibilitychange", onVisibility, { once: true });
+  window.location.href = "kbzpay://";
+  window.setTimeout(() => {
+    document.removeEventListener("visibilitychange", onVisibility);
+    if (!leftPage && document.visibilityState === "visible") {
+      if (confirm("KBZPay မဖွင့်နိုင်ပါ။ App Store မှ KBZPay ကိုဖွင့်/ထည့်သွင်းမလား?")) {
+        window.location.href = appStoreUrl;
+      }
+    }
+  }, 1400);
+}
 function did(){let x=localStorage.getItem(KEY);if(!x){x=crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random();localStorage.setItem(KEY,x)}return x}
 function modal(h){$("sheet").innerHTML=h;$("modal").classList.add("open")}function close(){ $("modal").classList.remove("open")}
 $("modal").onclick=e=>{if(e.target.id==="modal")close()};
