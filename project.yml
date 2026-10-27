@@ -1,4 +1,3 @@
-
 name: Aunglan
 
 options:
@@ -6,12 +5,17 @@ options:
   deploymentTarget:
     iOS: "16.0"
 
+settings:
+  base:
+    ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+
 targets:
   Aunglan:
     type: application
     platform: iOS
     sources:
       - Sources
+      - Resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.tko80.aunglan
