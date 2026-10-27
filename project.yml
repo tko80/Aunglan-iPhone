@@ -1,5 +1,6 @@
 
 name: Aunglan
+
 options:
   bundleIdPrefix: com.tko80
   deploymentTarget:
@@ -16,6 +17,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.tko80.aunglan
         PRODUCT_NAME: Aunglan
         INFOPLIST_KEY_CFBundleDisplayName: Aunglan
+        GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         TARGETED_DEVICE_FAMILY: "1,2"
         SWIFT_VERSION: "5.0"
