@@ -1,5 +1,6 @@
 import SwiftUI
 import WebKit
+import UIKit
 
 struct ContentView: View {
     var body: some View {
@@ -14,8 +15,12 @@ struct AunglanWebView: UIViewRepresentable {
     func makeUIView(context: Context) -> WKWebView {
         let configuration = WKWebViewConfiguration()
         configuration.allowsInlineMediaPlayback = true
+        // Bridge the website's notification button to a native explanation.
+        // WKWebView does not support Safari Home Screen Web Push.
+        configuration.userContentController.add(context.coordinator, name: "aunglanPWA")
 
         let webView = WKWebView(frame: .zero, configuration: configuration)
+        context.coordinator.webView = webView
         webView.allowsBackForwardNavigationGestures = true
         webView.navigationDelegate = context.coordinator
         webView.uiDelegate = context.coordinator
@@ -28,7 +33,37 @@ struct AunglanWebView: UIViewRepresentable {
 
     func updateUIView(_ webView: WKWebView, context: Context) {}
 
-    final class Coordinator: NSObject, WKNavigationDelegate, WKUIDelegate {
+    final class Coordinator: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler {
+        weak var webView: WKWebView?
+
+        func userContentController(_ userContentController: WKUserContentController,
+                                   didReceive message: WKScriptMessage) {
+            guard message.name == "aunglanPWA" else { return }
+            DispatchQueue.main.async { [weak self] in
+                self?.showPwaNotificationHelp()
+            }
+        }
+
+        private func showPwaNotificationHelp() {
+            guard let webView,
+                  let controller = webView.window?.rootViewController else { return }
+
+            let alert = UIAlertController(
+                title: "Aunglan Notifications",
+                message: "ဒီ IPA (WKWebView) ထဲမှာ Safari Web Push ကို တိုက်ရိုက်ဖွင့်လို့ မရသေးပါ။ Admin Announcement Notification ကို အခမဲ့လက်ခံရန် Safari မှ Aunglan ကိုဖွင့်ပြီး Share → Add to Home Screen လုပ်ထားတဲ့ Aunglan ကို အသုံးပြုပါ။",
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(title: "နောက်မှ", style: .cancel))
+            alert.addAction(UIAlertAction(title: "Safari ဖွင့်မယ်", style: .default) { [weak self] _ in
+                guard let url = URL(string: "https://tko80.github.io/Aunglan-iPhone/") else { return }
+                self?.openExternally(url)
+            })
+
+            var top = controller
+            while let presented = top.presentedViewController { top = presented }
+            top.present(alert, animated: true)
+        }
+
         private func openExternally(_ url: URL) {
             DispatchQueue.main.async {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
